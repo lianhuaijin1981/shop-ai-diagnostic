@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # MongoDB
+  mongodb:
+    image: mongo:6.0
+    container_name: shop-ai-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: shop_ai_diagnostic
+    networks:
+      - shop-ai-network
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: shop-ai-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - shop-ai-network
+
+  # Backend API
+  api:
+    build:
+      context: ./shop-ai-diagnostic-api
+      dockerfile: Dockerfile
+    container_name: shop-ai-api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: production
+      DATABASE_URI: mongodb://mongodb:27017/shop_ai_diagnostic
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET:-your-jwt-secret-change-in-production}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - shop-ai-network
+
+  # Frontend Web
+  web:
+    build:
+      context: ./shop-ai-diagnostic-web
+      dockerfile: Dockerfile
+    container_name: shop-ai-web
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - shop-ai-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  shop-ai-network:
+    driver: bridge
