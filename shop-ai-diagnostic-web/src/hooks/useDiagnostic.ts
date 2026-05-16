@@ -29,9 +29,9 @@ export function useDiagnosticTrends(
 }
 
 /**
- * 预警列表 Hook
+ * 预警列表 Hook (来自诊断模块)
  */
-export function useAlerts(shopId: string) {
+export function useDiagnosticAlerts(shopId: string) {
   return useQuery({
     queryKey: ['diagnostic', 'alerts', shopId],
     queryFn: () => diagnosticApi.getAlerts(shopId),

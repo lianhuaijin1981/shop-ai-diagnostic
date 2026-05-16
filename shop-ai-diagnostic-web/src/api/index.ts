@@ -11,7 +11,10 @@ export {
   shopApi,
   authApi,
   alertApi,
+  reportApi,
+  customerApi,
+  transactionApi,
 } from './http'
 
 // 导出类型供外部使用
-export type { IApiResponse, IPaginatedResponse } from './http'
+export type { IApiResponse, IPaginatedResponse } from '@/types'

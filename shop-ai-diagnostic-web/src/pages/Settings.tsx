@@ -238,10 +238,12 @@ export function Settings() {
                     {['#0ea5e9', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6'].map((color) => (
                       <button
                         key={color}
-                        className="w-8 h-8 rounded-full ring-2 ring-offset-2"
+                        className="w-8 h-8 rounded-full border-2 transition-transform hover:scale-110"
                         style={{
                           backgroundColor: color,
-                          ringColor: color === '#0ea5e9' ? color : 'transparent',
+                          borderColor: color === '#0ea5e9' ? '#0ea5e9' : 'transparent',
+                          outline: color === '#0ea5e9' ? `2px solid ${color}` : 'none',
+                          outlineOffset: '2px',
                         }}
                       />
                     ))}

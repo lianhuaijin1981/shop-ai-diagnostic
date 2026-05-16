@@ -63,30 +63,40 @@ interface Shop {
 }
 
 interface IShopState {
-  currentShopId: string | null
+  currentShopId: string
   shops: Shop[]
-  currentShop: Shop | null
+  currentShop: Shop
   setCurrentShop: (shopId: string) => void
   setShops: (shops: Shop[]) => void
   getShopById: (shopId: string) => Shop | undefined
 }
 
+// 默认店铺（演示模式）
+const DEFAULT_SHOP: Shop = {
+  id: 'shop_001',
+  name: '示范店001',
+  code: 'DEMO001',
+  address: '演示地址',
+  manager: '管理员',
+  status: 'active',
+}
+
 export const useShopStore = create<IShopState>()(
   persist(
     (set, get) => ({
-      currentShopId: null,
-      shops: [],
-      currentShop: null,
+      currentShopId: 'shop_001',
+      shops: [DEFAULT_SHOP],
+      currentShop: DEFAULT_SHOP,
       setCurrentShop: (shopId) => {
-        const shop = get().shops.find((s) => s.id === shopId) || null
+        const shop = get().shops.find((s) => s.id === shopId) || DEFAULT_SHOP
         set({ currentShopId: shopId, currentShop: shop })
       },
       setShops: (shops) => {
         const currentShopId = get().currentShopId
-        const currentShop = shops.find((s) => s.id === currentShopId) || null
+        const currentShop = shops.find((s) => s.id === currentShopId) || DEFAULT_SHOP
         set({ shops, currentShop })
       },
-      getShopById: (shopId) => get().shops.find((s) => s.id === shopId),
+      getShopById: (shopId) => get().shops.find((s) => s.id === shopId) || DEFAULT_SHOP,
     }),
     {
       name: 'shop-storage',

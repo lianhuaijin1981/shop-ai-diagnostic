@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import * as echarts from 'echarts'
 import type { EChartsOption } from 'echarts'
 import { cn } from '@/utils'
@@ -15,7 +15,7 @@ interface RadarChartProps {
 
 export function RadarChart({ data, indicators, className }: RadarChartProps) {
   const chartRef = useRef<HTMLDivElement>(null)
-  const chartInstance = useRef<echarts.ECharts>()
+  const chartInstance = useRef<echarts.ECharts | null>(null)
 
   useEffect(() => {
     if (!chartRef.current) return
@@ -103,7 +103,7 @@ interface LineChartProps {
 
 export function LineChart({ data, className }: LineChartProps) {
   const chartRef = useRef<HTMLDivElement>(null)
-  const chartInstance = useRef<echarts.ECharts>()
+  const chartInstance = useRef<echarts.ECharts | null>(null)
 
   useEffect(() => {
     if (!chartRef.current) return
@@ -193,7 +193,7 @@ interface BarChartProps {
 
 export function BarChart({ data, className }: BarChartProps) {
   const chartRef = useRef<HTMLDivElement>(null)
-  const chartInstance = useRef<echarts.ECharts>()
+  const chartInstance = useRef<echarts.ECharts | null>(null)
 
   useEffect(() => {
     if (!chartRef.current) return
@@ -278,7 +278,7 @@ interface PieChartProps {
 
 export function PieChart({ data, className }: PieChartProps) {
   const chartRef = useRef<HTMLDivElement>(null)
-  const chartInstance = useRef<echarts.ECharts>()
+  const chartInstance = useRef<echarts.ECharts | null>(null)
 
   useEffect(() => {
     if (!chartRef.current) return

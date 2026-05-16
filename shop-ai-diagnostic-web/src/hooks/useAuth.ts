@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { authApi } from '@/api'
+import { authApi } from '@/api/http'
 import { useAuthStore } from '@/stores'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,10 +11,13 @@ export function useLogin() {
   const navigate = useNavigate()
 
   return useMutation({
-    mutationFn: (data: { username: string; password: string }) =>
-      authApi.login(data),
-    onSuccess: (response) => {
-      const { token, user } = response.data.data
+    mutationFn: async (data: { username: string; password: string }) => {
+      const response = await authApi.login(data)
+      // 响应拦截器会返回 AxiosResponse，data.data 是实际的业务数据
+      return (response as unknown as { data: { token: string; user: { id: string; username: string; role: string } } }).data
+    },
+    onSuccess: (data) => {
+      const { token, user } = data
       setAuth({
         token,
         userId: user.id,

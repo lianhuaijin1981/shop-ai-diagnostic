@@ -6,19 +6,34 @@ import {
   Package,
   ListChecks,
   Bell,
+  FileText,
+  Users,
+  Receipt,
   Settings,
   ChevronLeft,
   ChevronRight,
   Menu,
+  TrendingUp,
+  BarChart3,
+  DollarSign,
+  RefreshCcw,
 } from 'lucide-react'
 import { cn } from '@/utils'
 
 const menuItems = [
   { path: '/dashboard', label: '经营大盘', icon: LayoutDashboard },
   { path: '/diagnostic', label: '五维诊断', icon: Target },
-  { path: '/diagnostic/products', label: '货品诊断', icon: Package },
+  { path: '/diagnostic/customer-flow', label: '客流深度分析', icon: TrendingUp, parent: '/diagnostic' },
+  { path: '/diagnostic/conversion', label: '转化深度分析', icon: BarChart3, parent: '/diagnostic' },
+  { path: '/diagnostic/avg-amount', label: '客单价深度分析', icon: DollarSign, parent: '/diagnostic' },
+  { path: '/diagnostic/repurchase', label: '复购深度分析', icon: RefreshCcw, parent: '/diagnostic' },
+  { path: '/diagnostic/profit', label: '利润深度分析', icon: DollarSign, parent: '/diagnostic' },
+  { path: '/diagnostic/products', label: '货品诊断', icon: Package, parent: '/diagnostic' },
   { path: '/tasks', label: '任务中心', icon: ListChecks },
   { path: '/alerts', label: '预警中心', icon: Bell },
+  { path: '/reports', label: '报告中心', icon: FileText },
+  { path: '/customers', label: '客户管理', icon: Users },
+  { path: '/transactions', label: '交易记录', icon: Receipt },
   { path: '/settings', label: '系统设置', icon: Settings },
 ]
 
@@ -54,19 +69,21 @@ export function Layout() {
               location.pathname === item.path ||
               (item.path !== '/dashboard' && location.pathname.startsWith(item.path))
             const Icon = item.icon
+            const isChild = !!item.parent
 
             return (
               <Link
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors',
+                  'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors',
+                  isChild ? 'ml-6 text-xs' : '',
                   isActive
                     ? 'bg-primary-50 text-primary-600'
                     : 'text-gray-600 hover:bg-gray-100',
                 )}
               >
-                <Icon className="w-5 h-5 flex-shrink-0" />
+                <Icon className={cn('flex-shrink-0', isChild ? 'w-4 h-4' : 'w-5 h-5')} />
                 {!sidebarCollapsed && (
                   <span className="text-sm font-medium">{item.label}</span>
                 )}

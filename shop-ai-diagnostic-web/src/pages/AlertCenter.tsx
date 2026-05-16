@@ -3,8 +3,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { cn } from '@/utils'
 import { useShopStore } from '@/stores'
 import { alertApi } from '@/api/http'
-import { Bell, CheckCircle, AlertTriangle, Info, Settings, Search, X } from 'lucide-react'
-import type { IAlert } from '@/types'
+import { Bell, CheckCircle, AlertTriangle, Info, Settings, Search } from 'lucide-react'
+import type { IAlert, IFiveDimensionScores } from '@/types'
 
 // 类型配置
 const typeConfig = {
@@ -35,23 +35,23 @@ export function AlertCenter() {
   const queryClient = useQueryClient()
   const [filterType, setFilterType] = useState<string | null>(null)
   const [filterStatus, setFilterStatus] = useState<string | null>(null)
-  const [filterDimension, setFilterDimension] = useState<string | null>(null)
+  const [filterDimension, setFilterDimension] = useState<keyof IFiveDimensionScores | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [page, setPage] = useState(1)
 
   // 查询预警列表
   const { data: alertsData, isLoading } = useQuery({
-    queryKey: ['alerts', currentShop?.id, filterType, filterStatus, filterDimension, searchQuery, page],
+    queryKey: ['alerts', currentShop.id, filterType, filterStatus, filterDimension, searchQuery, page],
     queryFn: () =>
       alertApi.getList({
-        shopId: currentShop!.id,
-        type: filterType as IAlert['type'],
-        status: filterStatus as IAlert['status'],
+        shopId: currentShop.id,
+        type: filterType as IAlert['type'] | undefined,
+        status: filterStatus as IAlert['status'] | undefined,
         dimension: filterDimension || undefined,
         page,
         pageSize: 20,
       }),
-    enabled: !!currentShop?.id,
+    enabled: !!currentShop.id,
   })
 
   // 处理预警
@@ -212,7 +212,8 @@ export function AlertCenter() {
         <select
           value={filterDimension || ''}
           onChange={(e) => {
-            setFilterDimension(e.target.value || null)
+            const val = e.target.value as keyof IFiveDimensionScores | ''
+            setFilterDimension(val || null)
             setPage(1)
           }}
           className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"

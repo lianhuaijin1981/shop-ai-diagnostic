@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { cn } from '@/utils'
 import { useShopStore } from '@/stores'
 import { taskApi } from '@/api/http'
-import { Plus, Search, Filter, CheckCircle, Clock, AlertCircle, MoreHorizontal, Trash2 } from 'lucide-react'
+import { Plus, Search, Filter, CheckCircle, Clock, AlertCircle, MoreHorizontal, Trash2, X, Loader2 } from 'lucide-react'
 import type { ITask, ITaskQuery } from '@/types'
 
 // 状态配置
@@ -36,20 +36,28 @@ export function TaskCenter() {
   const [filterPriority, setFilterPriority] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [page, setPage] = useState(1)
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [createForm, setCreateForm] = useState({
+    title: '',
+    description: '',
+    type: 'follow_up' as ITask['type'],
+    priority: 'medium' as ITask['priority'],
+    dueDate: '',
+  })
 
   // 查询任务列表
   const { data: tasksData, isLoading } = useQuery({
-    queryKey: ['tasks', currentShop?.id, filterStatus, filterPriority, searchQuery, page],
+    queryKey: ['tasks', currentShop.id, filterStatus, filterPriority, searchQuery, page],
     queryFn: () =>
       taskApi.getList({
-        shopId: currentShop!.id,
+        shopId: currentShop.id,
         status: filterStatus as ITask['status'],
         priority: filterPriority as ITask['priority'],
         keyword: searchQuery || undefined,
         page,
         pageSize: 20,
       }),
-    enabled: !!currentShop?.id,
+    enabled: !!currentShop.id,
   })
 
   // 完成任务
@@ -67,6 +75,30 @@ export function TaskCenter() {
       queryClient.invalidateQueries({ queryKey: ['tasks'] })
     },
   })
+
+  // 创建任务
+  const createMutation = useMutation({
+    mutationFn: (data: Partial<ITask>) => taskApi.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
+      setShowCreateModal(false)
+      setCreateForm({ title: '', description: '', type: 'follow_up', priority: 'medium', dueDate: '' })
+    },
+  })
+
+  const handleCreateTask = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!createForm.title.trim() || !createForm.dueDate) return
+    createMutation.mutate({
+      title: createForm.title.trim(),
+      description: createForm.description.trim(),
+      type: createForm.type,
+      priority: createForm.priority,
+      dueDate: createForm.dueDate,
+      shopId: currentShop.id,
+      status: 'pending',
+    })
+  }
 
   const tasks = tasksData?.data?.list || []
   const total = tasksData?.data?.total || 0
@@ -115,7 +147,10 @@ export function TaskCenter() {
             跟进问题处理进度 · 共 {total} 个任务
           </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
+        >
           <Plus className="w-4 h-4" />
           创建任务
         </button>
@@ -299,6 +334,111 @@ export function TaskCenter() {
           >
             下一页
           </button>
+        </div>
+      )}
+      {/* 创建任务弹窗 */}
+      {showCreateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900">创建新任务</h3>
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleCreateTask} className="p-6 space-y-5">
+              {/* 任务标题 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  任务标题 <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={createForm.title}
+                  onChange={(e) => setCreateForm((f) => ({ ...f, title: e.target.value }))}
+                  placeholder="请输入任务标题"
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  required
+                />
+              </div>
+              {/* 任务描述 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">任务描述</label>
+                <textarea
+                  value={createForm.description}
+                  onChange={(e) => setCreateForm((f) => ({ ...f, description: e.target.value }))}
+                  placeholder="请输入任务描述（选填）"
+                  rows={3}
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                />
+              </div>
+              {/* 类型 + 优先级 */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">任务类型</label>
+                  <select
+                    value={createForm.type}
+                    onChange={(e) => setCreateForm((f) => ({ ...f, type: e.target.value as ITask['type'] }))}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    <option value="diagnostic">诊断</option>
+                    <option value="follow_up">跟进</option>
+                    <option value="inventory">库存</option>
+                    <option value="training">培训</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    优先级 <span className="text-danger">*</span>
+                  </label>
+                  <select
+                    value={createForm.priority}
+                    onChange={(e) => setCreateForm((f) => ({ ...f, priority: e.target.value as ITask['priority'] }))}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    <option value="high">高优先级</option>
+                    <option value="medium">中优先级</option>
+                    <option value="low">低优先级</option>
+                  </select>
+                </div>
+              </div>
+              {/* 截止日期 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  截止日期 <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="date"
+                  value={createForm.dueDate}
+                  onChange={(e) => setCreateForm((f) => ({ ...f, dueDate: e.target.value }))}
+                  min={new Date().toISOString().slice(0, 10)}
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  required
+                />
+              </div>
+              {/* 操作按钮 */}
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateModal(false)}
+                  className="px-5 py-2.5 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  取消
+                </button>
+                <button
+                  type="submit"
+                  disabled={createMutation.isPending}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50"
+                >
+                  {createMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                  {createMutation.isPending ? '创建中...' : '创建任务'}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

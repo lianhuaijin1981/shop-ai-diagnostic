@@ -45,3 +45,4 @@ coverage/
 
 # Generated files
 *.spec.ts
+*.tsbuildinfo

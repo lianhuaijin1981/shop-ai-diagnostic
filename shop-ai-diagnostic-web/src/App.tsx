@@ -3,9 +3,17 @@ import { Layout } from '@/components/Layout'
 import {
   Dashboard,
   Diagnostic,
+  CustomerFlowAnalysis,
+  ConversionAnalysis,
+  AvgAmountAnalysis,
+  RepurchaseAnalysis,
+  ProfitAnalysis,
   ProductDiagnostic,
   TaskCenter,
   AlertCenter,
+  Reports,
+  Customers,
+  Transactions,
   Settings,
 } from '@/pages'
 
@@ -17,9 +25,17 @@ export default function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="diagnostic" element={<Diagnostic />} />
+          <Route path="diagnostic/customer-flow" element={<CustomerFlowAnalysis />} />
+          <Route path="diagnostic/conversion" element={<ConversionAnalysis />} />
+          <Route path="diagnostic/avg-amount" element={<AvgAmountAnalysis />} />
+          <Route path="diagnostic/repurchase" element={<RepurchaseAnalysis />} />
+          <Route path="diagnostic/profit" element={<ProfitAnalysis />} />
           <Route path="diagnostic/products" element={<ProductDiagnostic />} />
           <Route path="tasks" element={<TaskCenter />} />
           <Route path="alerts" element={<AlertCenter />} />
+          <Route path="reports" element={<Reports />} />
+          <Route path="customers" element={<Customers />} />
+          <Route path="transactions" element={<Transactions />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
