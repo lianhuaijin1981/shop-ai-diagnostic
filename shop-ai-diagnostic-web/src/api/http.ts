@@ -9,8 +9,10 @@ import type {
   ITask,
   ITaskQuery,
   IAlert,
+  IAlertQuery,
   IPaginatedResponse,
   IShop,
+  IUser,
 } from '@/types'
 
 const baseURL = import.meta.env.VITE_API_BASE_URL || '/api'
@@ -156,10 +158,26 @@ export const shopApi = {
 // ============ Auth API ============
 
 export const authApi = {
-  login: (data: { username: string; password: string }): Promise<IApiResponse<{ token: string }>> =>
+  login: (data: { username: string; password: string }): Promise<IApiResponse<{ token: string; user: IUser }>> =>
     instance.post('/auth/login', data),
 
   logout: (): Promise<IApiResponse<void>> => instance.post('/auth/logout'),
 
   getProfile: (): Promise<IApiResponse<IUser>> => instance.get('/auth/profile'),
+}
+
+// ============ Alert API ============
+
+export const alertApi = {
+  getList: (params: IAlertQuery): Promise<IApiResponse<IPaginatedResponse<IAlert>>> =>
+    instance.get('/diagnostic/alerts', { params }),
+
+  getById: (id: string): Promise<IApiResponse<IAlert>> =>
+    instance.get(`/diagnostic/alerts/${id}`),
+
+  process: (id: string, note?: string): Promise<IApiResponse<void>> =>
+    instance.post(`/diagnostic/alerts/${id}/process`, { note }),
+
+  resolve: (id: string, resolution?: string): Promise<IApiResponse<void>> =>
+    instance.post(`/diagnostic/alerts/${id}/resolve`, { resolution }),
 }

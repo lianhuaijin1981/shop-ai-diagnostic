@@ -8,8 +8,27 @@ export interface IShop {
   manager: string
   phone: string
   status: 'active' | 'inactive' | 'closed'
+  config?: Record<string, any>
+  businessHours?: BusinessHours[]
   createdAt: string
   updatedAt: string
+}
+
+export interface BusinessHours {
+  day: number
+  isOpen: boolean
+  openTime: string
+  closeTime: string
+}
+
+export interface IUser {
+  id: string
+  username: string
+  phone?: string
+  email?: string
+  avatar?: string
+  role: string
+  createdAt: string
 }
 
 export interface IEmployee {
@@ -243,6 +262,11 @@ export interface IDashboardStats {
   todayTransactions: number
   todayCustomers: number
   todayProfit: number
+  salesChangeRate: number
+  transactionChangeRate: number
+  customerChangeRate: number
+  profitChangeRate: number
+  totalScore: number
   weekTrend: IDailyStat[]
   realtimeAlertCount: number
   pendingTaskCount: number
@@ -275,7 +299,18 @@ export interface ITaskQuery {
   shopId: string
   status?: ITask['status']
   type?: ITask['type']
+  priority?: ITask['priority']
   assigneeId?: string
+  keyword?: string
+  page?: number
+  pageSize?: number
+}
+
+export interface IAlertQuery {
+  shopId: string
+  type?: IAlert['type']
+  status?: IAlert['status']
+  dimension?: IAlert['dimension']
   page?: number
   pageSize?: number
 }

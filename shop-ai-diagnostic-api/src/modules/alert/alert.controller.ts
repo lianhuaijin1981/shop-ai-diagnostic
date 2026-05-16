@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param } from '@nestjs/common'
+import { Controller, Get, Post, Param, Query } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger'
 import { AlertService } from './alert.service'
 

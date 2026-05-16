@@ -1,7 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document } from 'mongoose'
+import { Document, Types } from 'mongoose'
 
 export type TaskDocument = Task & Document
+
+// TaskComment 接口
+export interface TaskComment {
+  id: string
+  userId: string | Types.ObjectId
+  content: string
+  createdAt: Date
+}
 
 @Schema({ timestamps: true })
 export class Task {
@@ -37,6 +45,9 @@ export class Task {
 
   @Prop()
   completedAt: Date
+
+  @Prop({ type: Object, default: [] })
+  comments: TaskComment[]
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task)

@@ -1,8 +1,8 @@
 {
   "name": "shop-ai-diagnostic-api",
   "version": "1.0.0",
-  "description": "门店AI诊断系统后端API",
-  "author": "",
+  "description": "线下门店AI经营诊断系统后端API",
+  "author": "lianhuaijin1981",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -15,11 +15,7 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "typeorm-ts-node-commonjs",
-    "migration:generate": "npm run typeorm -- migration:generate -d src/database/data-source.ts",
-    "migration:run": "npm run typeorm -- migration:run -d src/database/data-source.ts"
+    "test:cov": "jest --coverage"
   },
   "dependencies": {
     "@nestjs/common": "^10.4.0",

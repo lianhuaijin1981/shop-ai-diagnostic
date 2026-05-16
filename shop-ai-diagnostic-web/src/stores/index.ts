@@ -15,12 +15,12 @@ interface IAuthState {
 
 export const useAuthStore = create<IAuthState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       token: null,
       userId: null,
       username: null,
       role: null,
-      isAuthenticated: !!get().token,
+      isAuthenticated: false,
       setAuth: (auth) =>
         set({
           token: auth.token,
@@ -40,6 +40,13 @@ export const useAuthStore = create<IAuthState>()(
     }),
     {
       name: 'auth-storage',
+      partialize: (state) => ({
+        token: state.token,
+        userId: state.userId,
+        username: state.username,
+        role: state.role,
+        isAuthenticated: state.isAuthenticated,
+      }),
     },
   ),
 )
