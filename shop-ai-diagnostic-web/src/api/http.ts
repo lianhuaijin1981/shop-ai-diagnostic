@@ -287,6 +287,33 @@ export const depDiagnosticApi = {
     instance.get('/diagnostic/deep/profit', { params }),
 }
 
+// ============ AI 方案生成 API ============
+
+export const aiPlanApi = {
+  /**
+   * 根据优化建议维度和标题，调用大模型生成具体落地方案
+   */
+  generatePlan: (params: {
+    shopId: string
+    dimension: string      // 维度：customerFlow | conversion | avgAmount | repurchase | profit
+    title: string          // 建议标题
+    description: string    // 建议描述
+    priority: string       // 优先级
+  }): Promise<IApiResponse<{
+    dimension: string
+    title: string
+    background: string       // 问题背景
+    targetGoal: string       // 目标指标
+    specificMeasures: string[]  // 具体措施
+    implementSteps: Array<{ step: number; action: string; timeline: string; owner: string }>
+    expectedEffect: string   // 预期效果
+    riskWarning: string      // 风险提示
+    exitMechanism: string    // 退出机制
+    referenceCase: string    // 参考案例
+  }>> =>
+    instance.post('/ai/generate-plan', params),
+}
+
 // ============ Transaction API ============
 
 export const transactionApi = {

@@ -151,7 +151,7 @@ export function ConversionAnalysis() {
       {/* 页头 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">转化深度分析</h1>
+          <h1 className="text-2xl font-bold text-gray-900">转化诊断</h1>
           <p className="text-sm text-gray-500 mt-1">
             {conv.period.start?.slice(0, 10)} ~ {conv.period.end?.slice(0, 10)} · {currentShop.name}
           </p>

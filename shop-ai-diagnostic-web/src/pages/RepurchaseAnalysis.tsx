@@ -143,7 +143,7 @@ export function RepurchaseAnalysis() {
       {/* 页头 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">复购深度分析</h1>
+          <h1 className="text-2xl font-bold text-gray-900">复购诊断</h1>
           <p className="text-sm text-gray-500 mt-1">
             {rp.period.start} ~ {rp.period.end} · {currentShop.name}
           </p>

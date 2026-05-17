@@ -154,7 +154,7 @@ export function AvgAmountAnalysis() {
       {/* 页头 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">客单价深度分析</h1>
+          <h1 className="text-2xl font-bold text-gray-900">客单价诊断</h1>
           <p className="text-sm text-gray-500 mt-1">
             {aa.period.start} ~ {aa.period.end} · {currentShop.name}
           </p>

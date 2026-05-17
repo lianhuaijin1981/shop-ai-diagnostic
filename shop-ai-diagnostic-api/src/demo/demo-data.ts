@@ -553,10 +553,10 @@ export function generateMockConversionAnalysis(shopId: string, _period: string) 
       { hour: 20, rate: 35, level: 'medium' as const }, { hour: 21, rate: 25, level: 'low' as const },
     ],
     productCategoryConversion: [
-      { category: '招牌奶茶', rate: 52, avgAmount: 25 },
-      { category: '冰淇淋', rate: 48, avgAmount: 18 },
-      { category: '小吃/甜品', rate: 35, avgAmount: 22 },
-      { category: '限定周边', rate: 18, avgAmount: 45 },
+      { category: '上衣/T恤', rate: 48, avgAmount: 159 },
+      { category: '裤装/牛仔', rate: 42, avgAmount: 239 },
+      { category: '连衣裙/裙装', rate: 38, avgAmount: 289 },
+      { category: '外套/夹克', rate: 22, avgAmount: 469 },
     ],
     rootCauseAnalysis: [
       { factor: '门头展示不清晰', impact: -5.0, isControllable: true, suggestion: '重新设计门头灯箱，突出「第二杯半价」等核心优惠' },
@@ -605,13 +605,13 @@ export function generateMockAvgAmountAnalysis(shopId: string, period: string) {
     { type: 'VIP会员', avgAmount: 88.5, benchmark: 85.0, gap: 3.5, reason: 'VIP会员消费能力强，套餐偏好明显' },
   ]
 
-  // 3. 产品组合分析
+  // 3. 产品组合分析（服装鞋帽连带购）
   const productCombinationAnalysis = [
-    { combo: '单杯饮品', frequency: 42, avgAmount: 28.5, profit: 9.9, note: '最低客单组合，贡献32%客流但仅18%营收' },
-    { combo: '饮品+小食', frequency: 28, avgAmount: 45.0, profit: 16.5, note: '主力加购组合，客单提升58%' },
-    { combo: '双杯套餐', frequency: 15, avgAmount: 58.0, profit: 20.3, note: '"第二杯半价"带量，但拉低毛利' },
-    { combo: '饮品+小食+周边', frequency: 8, avgAmount: 85.0, profit: 35.5, note: '最高价值组合，但占比仅8%' },
-    { combo: '限定套餐', frequency: 7, avgAmount: 72.0, profit: 28.8, note: '节日/季节限定套餐，贡献高且毛利好' },
+    { combo: '单件上衣', frequency: 38, avgAmount: 159, profit: 87, note: '最低客单组合，贡献34%客流但仅19%营收' },
+    { combo: '上衣+裤装', frequency: 32, avgAmount: 398, profit: 220, note: '主力连带组合，客单提升150%' },
+    { combo: '全套搭配（上+下+外套）', frequency: 15, avgAmount: 869, profit: 495, note: '最高价值组合，连带率高但成交门槛高' },
+    { combo: '上衣+配件', frequency: 10, avgAmount: 228, profit: 136, note: '配件加购拉升客单，转化难度低' },
+    { combo: '换季组合包', frequency: 5, avgAmount: 988, profit: 568, note: '换季大包，节假日促销效果好' },
   ]
 
   // 4. 时段客单价
@@ -900,13 +900,13 @@ export function generateMockProfitAnalysis(shopId: string, period: string) {
   const totalRevenue = 85000 // 模拟周期总收入
   const totalCost = 60775   // 28.5% 利润率对应成本
 
-  // 1. 利润构成分析（按品类）
+  // 1. 利润构成分析（按品类，服装鞋帽）
   const profitComposition = [
-    { category: '招牌奶茶', revenue: 32000, cost: 19200, profit: 12800, profitRate: 40.0, note: '毛利最高的主力品类，招牌地位稳固' },
-    { category: '冰淇淋/冷饮', revenue: 22000, cost: 15400, profit: 6600, profitRate: 30.0, note: '销量大但原料成本偏高' },
-    { category: '小吃/甜品', revenue: 18000, cost: 10800, profit: 7200, profitRate: 40.0, note: '高毛利产品，但占比仅21%' },
-    { category: '限定周边', revenue: 8000, cost: 9600, profit: -1600, profitRate: -20.0, note: '⚠️ 亏损！库存积压+定价偏低' },
-    { category: '套餐组合', revenue: 5000, cost: 5775, profit: -775, profitRate: -15.5, note: '⚠️ 亏损！"第二杯半价"套餐毛利被严重摊薄' },
+    { category: '上衣/T恤', revenue: 30000, cost: 13500, profit: 16500, profitRate: 55.0, note: '走量最大的品类，高毛利主力' },
+    { category: '裤装/牛仔', revenue: 26000, cost: 12480, profit: 13520, profitRate: 52.0, note: '稳定复购，连带销售主力品' },
+    { category: '连衣裙/裙装', revenue: 18000, cost: 8100, profit: 9900, profitRate: 55.0, note: '高客单、高毛利，受季节影响' },
+    { category: '外套/夹克', revenue: 8000, cost: 4320, profit: 3680, profitRate: 46.0, note: '高单价，但周转慢，占压资金' },
+    { category: '鞋类/配件', revenue: 3000, cost: 2375, profit: 625, profitRate: 20.8, note: '⚠️ 毛利偏低，主要作为引流配套' },
   ]
 
   // 2. 成本结构分析
@@ -918,16 +918,16 @@ export function generateMockProfitAnalysis(shopId: string, period: string) {
     { item: '其他杂费', amount: 1575, percentage: 2.5, isControllable: true, note: '设备维护、耗材、损耗等' },
   ]
 
-  // 3. 产品利润贡献排行
+  // 3. 产品利润贡献排行（服装鞋帽）
   const productProfitAnalysis = [
-    { productName: '招牌芋泥波波奶茶', salesCount: 480, profitPerUnit: 9.5, totalProfit: 4560, profitRate: 38.0 },
-    { productName: '经典珍珠奶茶(大杯)', salesCount: 420, profitPerUnit: 8.0, totalProfit: 3360, profitRate: 40.0 },
-    { productName: '杨枝甘露', salesCount: 380, profitPerUnit: 7.6, totalProfit: 2888, profitRate: 32.0 },
-    { productName: '芒果班戟小食', salesCount: 320, profitPerUnit: 8.8, totalProfit: 2816, profitRate: 44.0 },
-    { productName: '芝士蛋糕', salesCount: 280, profitPerUnit: 7.2, totalProfit: 2016, profitRate: 36.0 },
-    { productName: '季节限定（当前：杨梅）', salesCount: 220, profitPerUnit: 6.0, totalProfit: 1320, profitRate: 30.0 },
-    { productName: '联名周边（亏损品）', salesCount: 80, profitPerUnit: -20.0, totalProfit: -1600, profitRate: -20.0 },
-    { productName: '第二杯半价套餐', salesCount: 350, profitPerUnit: -2.2, totalProfit: -770, profitRate: -15.5 },
+    { productName: '爆款修身牛仔裤（深蓝/M）', salesCount: 142, profitPerUnit: 114, totalProfit: 16188, profitRate: 57.3 },
+    { productName: '春季碎花连衣裙（M）', salesCount: 118, profitPerUnit: 149, totalProfit: 17582, profitRate: 55.4 },
+    { productName: '基础款白色T恤（S/M/L）', salesCount: 210, profitPerUnit: 54, totalProfit: 11340, profitRate: 54.5 },
+    { productName: '新款格纹长款外套（L/XL）', salesCount: 56, profitPerUnit: 279, totalProfit: 15624, profitRate: 57.1 },
+    { productName: '时尚编织草帽', salesCount: 88, profitPerUnit: 48, totalProfit: 4224, profitRate: 60.0 },
+    { productName: '跨季节厚底短靴', salesCount: 30, profitPerUnit: 86, totalProfit: 2580, profitRate: 32.0 },
+    { productName: '积压款老款上衣（折扣清仓）', salesCount: 45, profitPerUnit: -18, totalProfit: -810, profitRate: -12.0 },
+    { productName: '亏损低价配件礼盒', salesCount: 20, profitPerUnit: -12, totalProfit: -240, profitRate: -8.0 },
   ]
 
   // 4. 根因分析
@@ -1341,29 +1341,29 @@ export function generateMockDashboard7Categories(shopId: string, period: 'today'
     }
   })
 
-  // === 2. 商品货品数据 ===
+  // === 2. 商品货品数据（服装鞋帽类目）===
   const stockAlerts = [
-    { skuId: 'SKU_001', skuName: '招牌芋泥波波奶茶', category: '奶茶', stock: 8, minStock: 30, cost: 16, price: 28, turnoverDays: 12, alertLevel: 'critical' as const },
-    { skuId: 'SKU_002', skuName: '珍珠原料（大袋装）', category: '原料', stock: 15, minStock: 25, cost: 35, price: 0, turnoverDays: 8, alertLevel: 'low' as const },
-    { skuId: 'SKU_003', skuName: '经典珍珠奶茶(大杯)', category: '奶茶', stock: 5, minStock: 20, cost: 12, price: 22, turnoverDays: 6, alertLevel: 'critical' as const },
-    { skuId: 'SKU_004', skuName: '芒果班戟小食', category: '小食', stock: 18, minStock: 15, cost: 12, price: 22, turnoverDays: 10, alertLevel: 'overstock' as const },
-    { skuId: 'SKU_005', skuName: '椰椰芋泥捞', category: '新品', stock: 22, minStock: 20, cost: 18, price: 35, turnoverDays: 15, alertLevel: 'normal' as const },
+    { skuId: 'SKU_001', skuName: '爆款修身牛仔裤（深蓝/M）', category: '裤装', stock: 6, minStock: 25, cost: 85, price: 199, turnoverDays: 8, alertLevel: 'critical' as const },
+    { skuId: 'SKU_002', skuName: '基础款白色T恤（S/M/L）', category: '上衣', stock: 12, minStock: 30, cost: 45, price: 99, turnoverDays: 10, alertLevel: 'low' as const },
+    { skuId: 'SKU_003', skuName: '春季碎花连衣裙（M）', category: '连衣裙', stock: 4, minStock: 20, cost: 120, price: 269, turnoverDays: 7, alertLevel: 'critical' as const },
+    { skuId: 'SKU_004', skuName: '秋季厚底休闲鞋（38/39）', category: '鞋类', stock: 22, minStock: 15, cost: 180, price: 399, turnoverDays: 18, alertLevel: 'overstock' as const },
+    { skuId: 'SKU_005', skuName: '新款格纹长款外套（L/XL）', category: '外套', stock: 18, minStock: 20, cost: 210, price: 489, turnoverDays: 22, alertLevel: 'normal' as const },
   ]
 
   const inventorySummary = [
-    { category: '奶茶饮品', skuCount: 28, totalStock: 850, totalValue: 22100, avgCost: 15.2, avgPrice: 26, sold7d: 320, turnoverRate: 0.38 },
-    { category: '小食甜品', skuCount: 18, totalStock: 420, totalValue: 8400, avgCost: 12.5, avgPrice: 20, sold7d: 185, turnoverRate: 0.44 },
-    { category: '咖啡特饮', skuCount: 12, totalStock: 280, totalValue: 7280, avgCost: 18.0, avgPrice: 32, sold7d: 95, turnoverRate: 0.34 },
-    { category: '限定周边', skuCount: 8, totalStock: 180, totalValue: 5400, avgCost: 30.0, avgPrice: 42, sold7d: 12, turnoverRate: 0.07 },
-    { category: '套餐组合', skuCount: 6, totalStock: 60, totalValue: 1800, avgCost: 25.0, avgPrice: 42, sold7d: 48, turnoverRate: 0.80 },
+    { category: '上衣/T恤', skuCount: 32, totalStock: 920, totalValue: 88320, avgCost: 68.0, avgPrice: 159, sold7d: 285, turnoverRate: 0.31 },
+    { category: '裤装/牛仔', skuCount: 24, totalStock: 560, totalValue: 89600, avgCost: 95.0, avgPrice: 239, sold7d: 198, turnoverRate: 0.35 },
+    { category: '连衣裙/裙装', skuCount: 20, totalStock: 380, totalValue: 95000, avgCost: 125.0, avgPrice: 289, sold7d: 162, turnoverRate: 0.43 },
+    { category: '外套/夹克', skuCount: 16, totalStock: 280, totalValue: 100800, avgCost: 210.0, avgPrice: 469, sold7d: 68, turnoverRate: 0.24 },
+    { category: '鞋类/配件', skuCount: 18, totalStock: 340, totalValue: 117640, avgCost: 168.0, avgPrice: 359, sold7d: 52, turnoverRate: 0.15 },
   ]
 
   const topSellingSKU = [
-    { skuId: 'SKU_A1', skuName: '招牌芋泥波波奶茶', category: '奶茶', soldCount: 186, revenue: 5208, profit: 2232, profitRate: 42.9, stock: 48 },
-    { skuId: 'SKU_A2', skuName: '经典珍珠奶茶(大杯)', category: '奶茶', soldCount: 158, revenue: 3476, profit: 1580, profitRate: 45.5, stock: 32 },
-    { skuId: 'SKU_A3', skuName: '杨枝甘露', category: '特饮', soldCount: 142, revenue: 4260, profit: 1704, profitRate: 40.0, stock: 55 },
-    { skuId: 'SKU_A4', skuName: '芒果班戟小食', category: '小食', soldCount: 128, revenue: 2816, profit: 1280, profitRate: 45.5, stock: 18 },
-    { skuId: 'SKU_A5', skuName: '芝士蛋糕', category: '甜品', soldCount: 105, revenue: 2625, profit: 945, profitRate: 36.0, stock: 40 },
+    { skuId: 'SKU_A1', skuName: '爆款修身牛仔裤（深蓝/M）', category: '裤装', soldCount: 142, revenue: 28258, profit: 15822, profitRate: 56.0, stock: 68 },
+    { skuId: 'SKU_A2', skuName: '春季碎花连衣裙（M）', category: '连衣裙', soldCount: 118, revenue: 31742, profit: 17292, profitRate: 54.5, stock: 42 },
+    { skuId: 'SKU_A3', skuName: '基础款白色T恤（S/M/L）', category: '上衣', soldCount: 210, revenue: 20790, profit: 11385, profitRate: 54.8, stock: 185 },
+    { skuId: 'SKU_A4', skuName: '新款格纹长款外套（L/XL）', category: '外套', soldCount: 56, revenue: 27384, profit: 15624, profitRate: 57.1, stock: 35 },
+    { skuId: 'SKU_A5', skuName: '时尚编织草帽', category: '配件', soldCount: 88, revenue: 7040, profit: 4224, profitRate: 60.0, stock: 54 },
   ]
 
   // === 3. 会员客户数据 ===
@@ -1697,7 +1697,7 @@ export function generateMockProductStructureDiag(shopId: string, _period: string
   }
   if (roleStructure.roles[1].salesRatio < 40) {
     roleStructure.issues.push('利润款占比偏低（当前58%，建议50-60%），整体盈利能力不足')
-    roleStructure.suggestions.push('优化利润款选品，提升高毛利商品（毛利率>50%）的SKU占比'))
+    roleStructure.suggestions.push('优化利润款选品，提升高毛利商品（毛利率>50%）的SKU占比')
   }
   roleStructure.diagnosis = roleStructure.issues.length === 0 ? '引流/利润/形象款结构合理，符合行业基准' : `结构需优化：存在${roleStructure.issues.length}个问题`
 

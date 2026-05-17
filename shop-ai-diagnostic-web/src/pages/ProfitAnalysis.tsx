@@ -148,7 +148,7 @@ export function ProfitAnalysis() {
       {/* 页头 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">利润深度分析</h1>
+          <h1 className="text-2xl font-bold text-gray-900">利润诊断</h1>
           <p className="text-sm text-gray-500 mt-1">
             {pf.period.start} ~ {pf.period.end} · {currentShop.name}
           </p>

@@ -9,7 +9,7 @@ import {
   RepurchaseAnalysis,
   ProfitAnalysis,
   ProductDiagnostic,
-  TaskCenter,
+  StrategyCenter,
   AlertCenter,
   Reports,
   Customers,
@@ -30,8 +30,8 @@ export default function App() {
           <Route path="diagnostic/avg-amount" element={<AvgAmountAnalysis />} />
           <Route path="diagnostic/repurchase" element={<RepurchaseAnalysis />} />
           <Route path="diagnostic/profit" element={<ProfitAnalysis />} />
-          <Route path="diagnostic/products" element={<ProductDiagnostic />} />
-          <Route path="tasks" element={<TaskCenter />} />
+          <Route path="products" element={<ProductDiagnostic />} />
+          <Route path="tasks" element={<StrategyCenter />} />
           <Route path="alerts" element={<AlertCenter />} />
           <Route path="reports" element={<Reports />} />
           <Route path="customers" element={<Customers />} />
@@ -42,3 +42,4 @@ export default function App() {
     </BrowserRouter>
   )
 }
+
